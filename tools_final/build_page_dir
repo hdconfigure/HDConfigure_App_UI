@@ -9,7 +9,7 @@ traverse_pages() {
 
     find "$1" -type f -name "index.pagebuilder" -exec sh -c '
         for file do
-            build_page "$file" > "index.html
+            build_page "$file" > "index.html"
         done
     ' sh {} +
 }
