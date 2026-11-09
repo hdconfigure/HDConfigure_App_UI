@@ -5,12 +5,11 @@ traverse_pages() {
     if [ ! -d "$1" ]; then
         echo "Error: '$1' is not a valid directory." >&2
         return 1
-    }
+    fi
 
     find "$1" -type f -name "index.pagebuilder" -exec sh -c '
         for file do
-            html_file="${file%.pagebuilder}.html"
-            build_page "$file" > "$1/$html_file"
+            build_page "$file" > "index.html
         done
     ' sh {} +
 }
