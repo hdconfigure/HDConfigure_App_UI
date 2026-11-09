@@ -13,4 +13,4 @@ traverse_pages() {
         done
     ' sh {} +
 }
-traerse_pages "$1";
+traverse_pages "$1";
