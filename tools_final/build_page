@@ -96,7 +96,7 @@ generate_page(){
 
     #create the javascript file that generates the new page
     pagefile="$1"
-    cat "/home/user/projects/flightdeckexperiences/generate_page.js" "$pagefile" | markdown_like_page_language > "/tmp/generate_page$$" ;node "/tmp/generate_page$$";rm "/tmp/generate_page$$";
+    cat "/$HOME/.config/hdconfigure/git/pagebuilder/generate_page.js" "$pagefile" | markdown_like_page_language > "/tmp/generate_page$$" ;node "/tmp/generate_page$$";rm "/tmp/generate_page$$";
 
 };
 generate_page "$@";
