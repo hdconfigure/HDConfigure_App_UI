@@ -1,0 +1,17 @@
+#!/bin/sh
+#copyright 2026 Theron Kauk and John Morris Beck - hd.configure.direct@gmail.com - all rights reserved
+
+traverse_pages() {
+    if [ ! -d "$1" ]; then
+        echo "Error: '$1' is not a valid directory." >&2
+        return 1
+    }
+
+    find "$1" -type f -name "index.pagebuilder" -exec sh -c '
+        for file do
+            html_file="${file%.pagebuilder}.html"
+            build_page "$file" "$html_file"
+        done
+    ' sh {} +
+}
+traerse_pages "$1";
