@@ -131,5 +131,13 @@ var flightdeckexperiencepage=(menu_link,header_text,header_subtext,body)=>{retur
     "FlightDeckExperiences",
     "/style.css",
     top_bar(menu_link) + header(header_text,header_subtext) + body + bottom_license("copyright (c) 2026 Theron Kauk and John Morris Beck all rights reserved"));
+
+																		   
 									  }
+
+var pagebuilder_generate_default_ui_page=(style,title,menu_link,header_text,header_subtext,body)=>{return new_page(
+    "copyright (c) 2026 Theron Kauk and John Morris Beck - hd.configure.direct@gmail.com - all rights reserved",
+    title,
+    style,
+    top_bar(menu_link) + header(header_text,header_subtext) + body + bottom_license("Copyright (C) 2026 by Theron Kauk and John Morris Beck <hdconfigure.direct@gmail.com> THE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE."));
 
