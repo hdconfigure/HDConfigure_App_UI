@@ -8,7 +8,7 @@ traverse_pages() {
         return 1
     fi
         for file do
-            dir_path=$(dirname "$file")
+            dir_path="$(dirname "$file")"
             hdconfigure_static_apps_build_page "$dir_path"
         done
     ' sh {} +
