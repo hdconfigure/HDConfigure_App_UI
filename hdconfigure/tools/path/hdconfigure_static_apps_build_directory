@@ -1,16 +1,15 @@
-#!/bin/sh
-#copyright 2026 Theron Kauk and John Morris Beck - hd.configure.direct@gmail.com - all rights reserved
-
+#!/usr/bin/env sh
+#~/.config/hdconfigure/tools/path/hdconfigure_static_apps_build_directory
+#Copyright (C) 2026 by Theron Kauk and John Morris Beck <hdconfigure.direct@gmail.com> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+user@hdconfigurepc0:~/work/hdconfigure/webapps/static/new_projects/truckads/register$ 
 traverse_pages() {
     if [ ! -d "$1" ]; then
         echo "Error: '$1' is not a valid directory." >&2
         return 1
     fi
-
-    find "$1" -type f -name "index.pagebuilder" -exec sh -c '
         for file do
             dir_path=$(dirname "$file")
-            build_page "$file" > "$dir_path/index.html"
+            hdconfigure_static_apps_build_page "$dir_path"
         done
     ' sh {} +
 }
