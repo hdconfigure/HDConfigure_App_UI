@@ -30,10 +30,10 @@ ${body}
 };
 
 // make a navbar for the page
-export const top_bar = (link: string, button_link: string): string => {
+export const top_bar = (menu_link: string, button_link: string): string => {
     return `
   <div class="top-bar">
-    <a href="${link}" class="menu-link" title="Open Menu">
+    <a href="${menu_link}" class="menu-link" title="Open Menu">
       <img src="${button_link}" alt="Menu">
       <span class="menu-text">Menu</span>
     </a>
