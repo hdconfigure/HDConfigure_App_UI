@@ -20,8 +20,36 @@ if [ ! -d "$webapp_directory" ]; then
 	exit 1
 fi
 
+# Ensure the menu template file exists
+menu_template_file="$webapp_directory/menu/index.ts"
+if [ ! -f "$menu_template_file" ]; then
+	error "error: $tool_name failed to find menu index file at $menu_template_file."
+	exit 1
+fi
+
+# Use find purely as an ls listing into a flat, hyphenated temporary file
+index_list_tmp="$HOME/.config-hdconfigure-webapps-static-$github_username-$github_repo_name-index-list-tmp"
+find "$webapp_directory" -name "index.ts" -type f > "$index_list_tmp"
+
+# Read from the flat tmp file in the main shell process (no subshell/pipe) so any exit 1 aborts the root caller
+while IFS= read -r file || [ -n "$file" ]; do
+	[ -z "$file" ] && continue
+	dir="${file%/*}"
+	if ! mkdir -p "$dir/menu"; then
+		rm -f "$index_list_tmp"
+		error "error: $tool_name failed to create directory $dir/menu."
+		exit 1
+	fi
+	if ! cp "$menu_template_file" "$dir/menu/index.ts"; then
+		rm -f "$index_list_tmp"
+		error "error: $tool_name failed to copy menu index to $dir/menu/index.ts."
+		exit 1
+	fi
+done < "$index_list_tmp"
+
+rm -f "$index_list_tmp"
+
 # Find all directories and subdirectories and run the build page command on each directly
 if ! find "$webapp_directory" -type d -exec hdconfigure_webapps_static_build_page {} +; then
 	exit 1
 fi
-
