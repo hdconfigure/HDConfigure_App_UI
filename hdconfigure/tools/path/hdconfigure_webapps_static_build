@@ -35,6 +35,7 @@ find "$webapp_directory" -name "index.ts" -type f > "$index_list_tmp"
 while IFS= read -r file || [ -n "$file" ]; do
 	[ -z "$file" ] && continue
 	dir="${file%/*}"
+	[ "${dir##*/}" = "menu" ] && continue
 	if ! mkdir -p "$dir/menu"; then
 		rm -f "$index_list_tmp"
 		error "error: $tool_name failed to create directory $dir/menu."
