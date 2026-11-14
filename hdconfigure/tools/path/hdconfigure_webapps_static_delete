@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+# ~/.config/hdconfigure/tools/git/hdconfigure/hdconfigure_webapps/hdconfigure/tools/path/hdconfigure_webapps_static_delete
+# Copyright (C) 2026 by Theron Kauk and John Morris Beck <hdconfigure.direct@gmail.com> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+tool_name="hdconfigure_webapps_static_delete"
+
+github_username="$1"
+github_repo_name="$2"
+webapp_parent_directory="$HOME/.config/hdconfigure/webapps/static/$github_username"
+webapp_directory="$webapp_parent_directory/$github_repo_name"
+
+# Check if both arguments are present
+if [ -z "$github_username" ] || [ -z "$github_repo_name" ]; then
+        error "error: $tool_name requires both <github_username> and <github_repo_name> arguments."
+        exit 1
+fi
+
+# Check if the target directory exists before deletion
+if [ ! -d "$webapp_directory" ]; then
+        error "error: $tool_name failed to find directory. $webapp_directory is not a valid directory."
+        exit 1
+fi
+
+# Recursively and forcefully remove the webapp directory, erroring and exiting 1 if it fails
+if ! rm -rf "$webapp_directory"; then
+        error "error: $tool_name failed to delete directory $webapp_directory."
+        exit 1
+fi
