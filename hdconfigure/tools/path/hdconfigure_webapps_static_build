@@ -11,45 +11,73 @@ webapp_directory="$webapp_parent_directory/$github_repo_name"
 
 # Check if both arguments are present
 if [ -z "$github_username" ] || [ -z "$github_repo_name" ]; then
-	error "error: $tool_name requires both <github_username> and <github_repo_name> arguments."
-	exit 1
+        error "error: $tool_name requires both <github_username> and <github_repo_name> arguments."
+        exit 1
 fi
 
 if [ ! -d "$webapp_directory" ]; then
-	error "error: $tool_name failed to build directory. $webapp_directory is not a valid directory."
-	exit 1
+        error "error: $tool_name failed to build directory. $webapp_directory is not a valid directory."
+        exit 1
 fi
 
-# Ensure the menu template file exists
-menu_template_file="$webapp_directory/menu/index.ts"
-if [ ! -f "$menu_template_file" ]; then
-	error "error: $tool_name failed to find menu index file at $menu_template_file."
-	exit 1
+# Ensure the menu index file exists and build the original menu folder
+menu_dir="$webapp_directory/menu"
+if [ ! -f "$menu_dir/index.ts" ]; then
+        error "error: $tool_name failed to find menu index file at $menu_dir/index.ts."
+        exit 1
+fi
+if ! hdconfigure_webapps_static_build_page "$menu_dir"; then
+        exit 1
 fi
 
-# Use find purely as an ls listing into a flat, hyphenated temporary file
+# Use find to generate a flat list of all index.ts files into a temporary file
 index_list_tmp="$HOME/.config-hdconfigure-webapps-static-$github_username-$github_repo_name-index-list-tmp"
 find "$webapp_directory" -name "index.ts" -type f > "$index_list_tmp"
 
-# Read from the flat tmp file in the main shell process (no subshell/pipe) so any exit 1 aborts the root caller
+# First while loop: Build the static page for every index.ts file in the index list
 while IFS= read -r file || [ -n "$file" ]; do
-	[ -z "$file" ] && continue
-	dir="${file%/*}"
-	[ "${dir##*/}" = "menu" ] && continue
-	if ! mkdir -p "$dir/menu"; then
-		rm -f "$index_list_tmp"
-		error "error: $tool_name failed to create directory $dir/menu."
-		exit 1
-	fi
-	if ! cp "$menu_template_file" "$dir/menu/index.ts"; then
-		rm -f "$index_list_tmp"
-		error "error: $tool_name failed to copy menu index to $dir/menu/index.ts."
-		exit 1
-	fi
-	if ! hdconfigure_webapps_static_build_page "$dir"; then
-		rm -f "$index_list_tmp"
-		exit 1
-	fi
+        # Skip empty lines read from the temporary list
+        [ -z "$file" ] && continue
+        
+        # Extract the parent directory path from the full index.ts file path
+        dir="${file%/*}"
+        
+        # Skip processing if the directory itself is named 'menu'
+        [ "${dir##*/}" = "menu" ] && continue
+        
+        # Run the static page builder tool on the current project subdirectory
+        if ! hdconfigure_webapps_static_build_page "$dir"; then
+                # Clean up temporary file and abort if the build fails
+                rm -f "$index_list_tmp"
+                exit 1
+        fi
 done < "$index_list_tmp"
 
+# Second while loop: Create the menu directory and copy the source menu index.html into it for every file in the index list
+while IFS= read -r file || [ -n "$file" ]; do
+        # Skip empty lines read from the temporary list
+        [ -z "$file" ] && continue
+        
+        # Extract the parent directory path from the full index.ts file path
+        dir="${file%/*}"
+        
+        # Skip processing if the directory itself is named 'menu'
+        [ "${dir##*/}" = "menu" ] && continue
+        
+        # Ensure the destination 'menu' subdirectory exists under the current project directory
+        if ! mkdir -p "$dir/menu"; then
+                rm -f "$index_list_tmp"
+                error "error: $tool_name failed to create directory $dir/menu."
+                exit 1
+        fi
+        
+        # Copy the pre-built menu index.html file from the source menu directory into this subdirectory's menu folder
+        if ! cp "$menu_dir/index.html" "$dir/menu/"; then
+                rm -f "$index_list_tmp"
+                error "error: $tool_name failed to copy menu index.html to $dir/menu/."
+                exit 1
+        fi
+done < "$index_list_tmp"
+
+# Clean up the temporary index list file before exiting
 rm -f "$index_list_tmp"
