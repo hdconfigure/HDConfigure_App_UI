@@ -61,9 +61,7 @@ export const bottom_license = (license: string): string => {
 export const subheader = (header_text: string): string => {
     return `
     <div class="subheader-wrapper">
-      <div class="subheader-inner">
         <h2 class="subheader-title">${header_text}</h2>
-      </div>
     </div>`;
 };
 
