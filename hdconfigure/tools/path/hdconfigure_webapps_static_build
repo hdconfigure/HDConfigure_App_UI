@@ -46,11 +46,10 @@ while IFS= read -r file || [ -n "$file" ]; do
 		error "error: $tool_name failed to copy menu index to $dir/menu/index.ts."
 		exit 1
 	fi
+	if ! hdconfigure_webapps_static_build_page "$dir"; then
+		rm -f "$index_list_tmp"
+		exit 1
+	fi
 done < "$index_list_tmp"
 
 rm -f "$index_list_tmp"
-
-# Find all directories and subdirectories and run the build page command on each directly
-if ! find "$webapp_directory" -type d -exec hdconfigure_webapps_static_build_page {} +; then
-	exit 1
-fi
