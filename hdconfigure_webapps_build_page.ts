@@ -40,17 +40,6 @@ export const top_bar = (link: string, button_link: string): string => {
   </div>`;
 };
 
-// make a header for the page
-export const header = (header_text: string, header_subtext: string): string => {
-    return `
-  <div class="card-container">
-    <div class="header-banner">
-      <h1>${header_text}</h1>
-      <p class="description">${header_subtext}</p>
-    </div>
-  </div>`;
-};
-
 export const text = (text_value: string): string => {
     return `
     <div class="info-block">
