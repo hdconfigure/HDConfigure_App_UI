@@ -9,6 +9,8 @@ github_repo_name="$2"
 webapp_parent_directory="$HOME/.config/hdconfigure/webapps/static/$github_username"
 webapp_directory="$webapp_parent_directory/$github_repo_name"
 
+hdconfigure_webapps_static_build "$github_username" "$github_repo_name"
+
 if [ ! -d "$webapp_directory" ]; then
     error "error: $tool_name failed. Webapp directory does not exist at $webapp_directory."
     exit 1
